@@ -8,6 +8,9 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import getAllMemberWaka from "../../apis/getAllMemberWaka";
+import GoldMedal from "../../images/goldmedal.png";
+import SilverMedal from "../../images/silvermedal.png";
+import BronzeMedal from "../../images/bronzemedal.png";
 
 type dto = {
   username: string;
@@ -75,7 +78,7 @@ const LeaderBoardList = ({ day, isRefetch }: Props) => {
         </Box>
       ) : (
         data &&
-        knowDaysValue(data).map((value: any) => {
+        knowDaysValue(data).map((value, index) => {
           // const svg = await getRandomImage(value.username);
           const time =
             day === 7
@@ -86,9 +89,29 @@ const LeaderBoardList = ({ day, isRefetch }: Props) => {
 
           return (
             <Grid container key={value.username} sx={{ mt: 5 }}>
-              <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
+              <Grid
+                item
+                xs={2}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                }}
+              >
+                {index + 1 === 1 ? (
+                  <img src={GoldMedal} width={60} alt="금메달"></img>
+                ) : index + 1 === 2 ? (
+                  <img src={SilverMedal} width={60} alt="은메달"></img>
+                ) : index + 1 === 3 ? (
+                  <img src={BronzeMedal} width={60} alt="동메달"></img>
+                ) : (
+                  <Typography variant="h6">{index + 1}등</Typography>
+                )}
+              </Grid>
+              <Grid item xs={8} sx={{ display: "flex", alignItems: "center" }}>
                 <img
-                  src={`https://avatars.dicebear.com/api/human/${value.username}.svg`}
+                  src={`https://avatars.dicebear.com/api/croodles-neutral/${value.username}.svg`}
                   alt=""
                   width={150}
                   style={{ width: "15%", borderRadius: "50%" }}
@@ -107,7 +130,7 @@ const LeaderBoardList = ({ day, isRefetch }: Props) => {
                   justifyContent: "center",
                 }}
               >
-                <Typography sx={{ fontSize: "2vh" }}>
+                <Typography>
                   {time[0].toString() + "시간 " + time[1].toString() + "분 "}
                 </Typography>
               </Grid>
