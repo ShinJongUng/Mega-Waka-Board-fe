@@ -113,12 +113,11 @@ const LeaderBoardList = ({ day, isRefetch }: Props) => {
                 <img
                   src={`https://avatars.dicebear.com/api/croodles-neutral/${value.username}.svg`}
                   alt=""
-                  width={150}
-                  style={{ width: "15%", borderRadius: "50%" }}
+                  style={{ width: 80, borderRadius: "50%" }}
                 />
                 <div>
                   <h3 className="name text-dark">{value.username}</h3>
-                  <span>Megabrain 정회원</span>
+                  <span>Megabrain</span>
                 </div>
               </Grid>
               <Grid
