@@ -1,20 +1,36 @@
-import { Box, Button, Container, Toolbar, Typography } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
+import {
+  Box,
+  Button,
+  Container,
+  ToggleButton,
+  ToggleButtonGroup,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
 import getRefreshMember from "../../apis/getRefreshMember";
 import LeaderBoardList from "../List";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 const MainBoard = () => {
-  const { data, isFetching, refetch } = useQuery({
-    queryKey: ["updataWaka"],
-    queryFn: getRefreshMember,
-    refetchOnWindowFocus: false,
-    enabled: false,
-    onError: (e: any) => {
-      console.log(e.message);
+  const [day, setDay] = useState(7);
+
+  const { mutate, isLoading } = useMutation(getRefreshMember, {
+    onError: (error) => {
+      console.log(error);
     },
   });
+
   const handleRefresh = () => {
-    refetch();
+    mutate(day);
+  };
+
+  const handleChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newDay: number | null
+  ) => {
+    if (newDay != null) setDay(newDay);
   };
   return (
     <Container maxWidth="lg">
@@ -22,43 +38,32 @@ const MainBoard = () => {
       <Typography variant="h4" sx={{ mt: 5 }} fontWeight="700" align="center">
         Coding LeaderBoard
       </Typography>
-      <Box className="duration" sx={{ mt: 5 }} textAlign="center">
+      <Box className="duration" sx={{ mt: 2 }} textAlign="center">
         <Button
-          data-id="7"
-          color="inherit"
-          variant="contained"
-          sx={{ mr: 2, ml: 2 }}
-        >
-          7 Days
-        </Button>
-        <Button
-          data-id="30"
-          color="inherit"
-          variant="outlined"
-          sx={{ mr: 2, ml: 2 }}
-        >
-          14 Days
-        </Button>
-        <Button
-          data-id="0"
-          color="inherit"
-          variant="outlined"
-          sx={{ mr: 2, ml: 2 }}
-        >
-          30 Days
-        </Button>
-        <Button
-          disabled={isFetching}
+          disabled={isLoading}
           onClick={handleRefresh}
           data-id="0"
-          color="inherit"
-          variant="outlined"
+          variant="contained"
+          endIcon={<RefreshIcon />}
           sx={{ mr: 2, ml: 2 }}
         >
-          {!isFetching ? (data !== undefined ? "갱신완료" : "갱신") : "로딩중"}
+          {!isLoading ? "갱신" : "로딩중"}
         </Button>
       </Box>
-      <LeaderBoardList />
+      <Box className="duration" sx={{ mt: 3 }} textAlign="center">
+        <ToggleButtonGroup
+          color="primary"
+          value={day}
+          exclusive
+          onChange={handleChange}
+        >
+          <ToggleButton value={7}>지난 7일</ToggleButton>
+          <ToggleButton value={14}>지난 14일</ToggleButton>
+          <ToggleButton value={30}>지난 30일</ToggleButton>
+        </ToggleButtonGroup>
+      </Box>
+
+      <LeaderBoardList day={day} />
     </Container>
   );
 };

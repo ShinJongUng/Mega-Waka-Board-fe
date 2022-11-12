@@ -46,7 +46,11 @@ const BoardHeader = () => {
           </Typography>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {navItems.map((item) => (
-              <Link to={item.route} key={item.name}>
+              <Link
+                to={item.route}
+                key={item.name}
+                style={{ textDecoration: "none" }}
+              >
                 <Button sx={{ color: "#fff" }}>{item.name}</Button>
               </Link>
             ))}

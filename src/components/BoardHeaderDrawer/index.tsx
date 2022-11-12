@@ -7,6 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
+import { Link } from "react-router-dom";
 import { navItems } from "../BoardHeader";
 
 type Props = {
@@ -23,9 +24,15 @@ const HeaderDrawer = ({ handleDrawerToggle }: Props) => {
       <List>
         {navItems.map((item) => (
           <ListItem key={item.name} disablePadding>
-            <ListItemButton sx={{ textAlign: "center" }}>
-              <ListItemText primary={item.name} />
-            </ListItemButton>
+            <Link
+              to={item.route}
+              key={item.name}
+              style={{ textDecoration: "none" }}
+            >
+              <ListItemButton sx={{ textAlign: "center" }}>
+                <ListItemText primary={item.name} />
+              </ListItemButton>
+            </Link>
           </ListItem>
         ))}
       </List>
