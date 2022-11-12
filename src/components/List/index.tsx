@@ -6,6 +6,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 import getAllMemberWaka from "../../apis/getAllMemberWaka";
 
 type dto = {
@@ -15,14 +16,25 @@ type dto = {
   last_30_days: string;
 };
 
-const LeaderBoardList = ({ day }: { day: number }) => {
-  const { isLoading, data } = useQuery(["waka"], getAllMemberWaka, {
+type Props = {
+  day: number;
+  isRefetch: boolean;
+};
+
+const LeaderBoardList = ({ day, isRefetch }: Props) => {
+  const { isLoading, data, refetch } = useQuery(["waka"], getAllMemberWaka, {
     refetchOnWindowFocus: false,
     retry: 0,
     onError: (e: any) => {
       console.log(e.message);
     },
   });
+
+  useEffect(() => {
+    if (isRefetch) {
+      refetch();
+    }
+  }, [refetch, isRefetch]);
 
   const knowDaysValue = (data) => {
     return data.sort((a: dto, b: dto) => {

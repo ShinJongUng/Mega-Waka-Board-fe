@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import getRefreshMember from "../../apis/getRefreshMember";
 import LeaderBoardList from "../List";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -16,7 +16,7 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 const MainBoard = () => {
   const [day, setDay] = useState(7);
 
-  const { mutate, isLoading } = useMutation(getRefreshMember, {
+  const { mutate, isLoading, isSuccess } = useMutation(getRefreshMember, {
     onError: (error) => {
       console.log(error);
     },
@@ -63,7 +63,7 @@ const MainBoard = () => {
         </ToggleButtonGroup>
       </Box>
 
-      <LeaderBoardList day={day} />
+      <LeaderBoardList day={day} isRefetch={isSuccess} />
     </Container>
   );
 };
