@@ -53,6 +53,8 @@ const LeaderBoardList = ({ day, isRefetch }: Props) => {
           : day === 14
           ? b.last_14_days
           : b.last_30_days;
+      if (sortB === "0") return -1;
+      if (sortB.indexOf("H") === -1) return -1;
       return parseInt(sortB.split(":")[0]) < parseInt(sortA.split(":")[0])
         ? -1
         : parseInt(sortB.split(":")[0]) > parseInt(sortA.split(":")[0])
@@ -82,11 +84,11 @@ const LeaderBoardList = ({ day, isRefetch }: Props) => {
           // const svg = await getRandomImage(value.username);
           const time =
             day === 7
-              ? value.last_7_days.split(/:|-/g)
+              ? value.last_7_days
               : day === 14
-              ? value.last_14_days.split(/:|-/g)
-              : value.last_30_days.split(/:|-/g);
-
+              ? value.last_14_days
+              : value.last_30_days;
+          const nTime = time.toString().replace("H", "시간").replace("M", "");
           return (
             <Grid container key={value.username} sx={{ mt: 5 }}>
               <Grid
@@ -129,9 +131,7 @@ const LeaderBoardList = ({ day, isRefetch }: Props) => {
                   justifyContent: "center",
                 }}
               >
-                <Typography>
-                  {time[0].toString() + "시간 " + time[1].toString() + "분 "}
-                </Typography>
+                <Typography>{nTime + "분"}</Typography>
               </Grid>
             </Grid>
           );
