@@ -7,11 +7,12 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import getRefreshMember from "../../apis/getRefreshMember";
 import LeaderBoardList from "../List";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import getAllMemberWaka from "../../apis/getAllMemberWaka";
 
 const MainBoard = () => {
   const [day, setDay] = useState(7);
@@ -22,9 +23,34 @@ const MainBoard = () => {
     },
   });
 
+  const {
+    isLoading: isLoadingList,
+    data,
+    refetch,
+  } = useQuery(["waka"], getAllMemberWaka, {
+    refetchOnWindowFocus: false,
+    retry: 0,
+    onError: (e: any) => {
+      console.log(e.message);
+    },
+  });
+
   const handleRefresh = () => {
     mutate(day);
   };
+
+  const dayFunc = (data) => {
+    if (day === 7) return data.updatedTime7Days;
+    else if (day === 14) return data.updatedTime14Days;
+    else if (day === 30) return data.updatedTime30Days;
+    else return 0;
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      refetch();
+    }
+  }, [refetch, isSuccess]);
 
   const handleChange = (
     event: React.MouseEvent<HTMLElement>,
@@ -61,9 +87,16 @@ const MainBoard = () => {
           <ToggleButton value={14}>지난 14일</ToggleButton>
           <ToggleButton value={30}>지난 30일</ToggleButton>
         </ToggleButtonGroup>
+        <Typography sx={{ mt: 5 }} fontWeight="300" align="center">
+          갱신 시각: {data ? dayFunc(data) : "00:00"}
+        </Typography>
       </Box>
 
-      <LeaderBoardList day={day} isRefetch={isSuccess} />
+      <LeaderBoardList
+        day={day}
+        isLoading={isLoadingList}
+        data={data && data.memberDtos}
+      />
     </Container>
   );
 };

@@ -5,9 +5,6 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
-import getAllMemberWaka from "../../apis/getAllMemberWaka";
 import GoldMedal from "../../images/goldmedal.png";
 import SilverMedal from "../../images/silvermedal.png";
 import BronzeMedal from "../../images/bronzemedal.png";
@@ -21,38 +18,35 @@ type dto = {
 
 type Props = {
   day: number;
-  isRefetch: boolean;
+  isLoading: boolean;
+  data: any;
 };
 
-const LeaderBoardList = ({ day, isRefetch }: Props) => {
-  const { isLoading, data, refetch } = useQuery(["waka"], getAllMemberWaka, {
-    refetchOnWindowFocus: false,
-    retry: 0,
-    onError: (e: any) => {
-      console.log(e.message);
-    },
-  });
-
-  useEffect(() => {
-    if (isRefetch) {
-      refetch();
+const LeaderBoardList = ({ day, isLoading, data }: Props) => {
+  const dayReplaceFunc = (sortData) => {
+    if (day === 7) {
+      return sortData.last_7_days
+        .replace("H", ":")
+        .replace("M", "")
+        .replace(" ", "");
+    } else if (day === 14) {
+      return sortData.last_14_days
+        .replace("H", ":")
+        .replace("M", "")
+        .replace(" ", "");
+    } else {
+      return sortData.last_30_days
+        .replace("H", ":")
+        .replace("M", "")
+        .replace(" ", "");
     }
-  }, [refetch, isRefetch]);
+  };
 
   const knowDaysValue = (data) => {
     return data.sort((a: dto, b: dto) => {
-      const sortA =
-        day === 7
-          ? a.last_7_days.replace("H", ":").replace("M", "").replace(" ", "")
-          : day === 14
-          ? a.last_14_days.replace("H", ":").replace("M", "").replace(" ", "")
-          : a.last_30_days.replace("H", ":").replace("M", "").replace(" ", "");
-      const sortB =
-        day === 7
-          ? b.last_7_days.replace("H", ":").replace("M", "").replace(" ", "")
-          : day === 14
-          ? b.last_14_days.replace("H", ":").replace("M", "").replace(" ", "")
-          : b.last_30_days.replace("H", ":").replace("M", "").replace(" ", "");
+      const sortA = dayReplaceFunc(a);
+      const sortB = dayReplaceFunc(b);
+
       if (sortA.indexOf(":") === -1) return 1;
       if (sortB.indexOf(":") === -1) return -1;
       return parseInt(sortB.split(":")[0]) < parseInt(sortA.split(":")[0])
