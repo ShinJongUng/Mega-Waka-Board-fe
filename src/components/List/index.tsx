@@ -43,18 +43,18 @@ const LeaderBoardList = ({ day, isRefetch }: Props) => {
     return data.sort((a: dto, b: dto) => {
       const sortA =
         day === 7
-          ? a.last_7_days
+          ? a.last_7_days.replace("H", ":").replace("M", "").replace(" ", "")
           : day === 14
-          ? a.last_14_days
-          : a.last_30_days;
+          ? a.last_14_days.replace("H", ":").replace("M", "").replace(" ", "")
+          : a.last_30_days.replace("H", ":").replace("M", "").replace(" ", "");
       const sortB =
         day === 7
-          ? b.last_7_days
+          ? b.last_7_days.replace("H", ":").replace("M", "").replace(" ", "")
           : day === 14
-          ? b.last_14_days
-          : b.last_30_days;
-      if (sortB === "0") return -1;
-      if (sortB.indexOf("H") === -1) return -1;
+          ? b.last_14_days.replace("H", ":").replace("M", "").replace(" ", "")
+          : b.last_30_days.replace("H", ":").replace("M", "").replace(" ", "");
+      if (sortA.indexOf(":") === -1) return 1;
+      if (sortB.indexOf(":") === -1) return -1;
       return parseInt(sortB.split(":")[0]) < parseInt(sortA.split(":")[0])
         ? -1
         : parseInt(sortB.split(":")[0]) > parseInt(sortA.split(":")[0])
@@ -88,7 +88,7 @@ const LeaderBoardList = ({ day, isRefetch }: Props) => {
               : day === 14
               ? value.last_14_days
               : value.last_30_days;
-          const nTime = time.toString().replace("H", "시간").replace("M", "");
+          const nTime = time.toString().replace("H", "시간").replace("M", "분");
           return (
             <Grid container key={value.username} sx={{ mt: 5 }}>
               <Grid
@@ -131,7 +131,7 @@ const LeaderBoardList = ({ day, isRefetch }: Props) => {
                   justifyContent: "center",
                 }}
               >
-                <Typography>{nTime + "분"}</Typography>
+                <Typography>{nTime}</Typography>
               </Grid>
             </Grid>
           );
