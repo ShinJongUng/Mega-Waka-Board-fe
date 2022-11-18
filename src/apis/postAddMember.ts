@@ -1,18 +1,23 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { PersonData } from "../components/SettingBoard";
 
-const postAddMember = async (personData: PersonData): Promise<any> => {
+const postAddMember = async (personData: PersonData) => {
   try {
-    const { data } = await axios.post(
-      `http://203.241.228.50:18082/api/member/add
-    `,
-      personData
+    const result = await axios.post(
+      `http://203.241.228.50:18083/api/user/add-user`,
+      {},
+      {
+        params: {
+          username: personData.userName,
+          apikey: btoa(personData.apiKey),
+          organization: personData.organization,
+        },
+      }
     );
-    return data;
+    return Promise.resolve(result.data);
   } catch (error: any) {
-    const { response } = error as unknown as AxiosError;
-
-    return Promise.reject(response.data);
+    console.log(error);
+    return Promise.resolve(error.response.data);
   }
 };
 

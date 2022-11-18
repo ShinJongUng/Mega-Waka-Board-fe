@@ -25,20 +25,11 @@ type Props = {
 const LeaderBoardList = ({ day, isLoading, data }: Props) => {
   const dayReplaceFunc = (sortData) => {
     if (day === 7) {
-      return sortData.last_7_days
-        .replace("H", ":")
-        .replace("M", "")
-        .replace(" ", "");
+      return sortData.last_7_days;
     } else if (day === 14) {
-      return sortData.last_14_days
-        .replace("H", ":")
-        .replace("M", "")
-        .replace(" ", "");
+      return sortData.last_14_days;
     } else {
-      return sortData.last_30_days
-        .replace("H", ":")
-        .replace("M", "")
-        .replace(" ", "");
+      return sortData.last_30_days;
     }
   };
 
@@ -82,7 +73,7 @@ const LeaderBoardList = ({ day, isLoading, data }: Props) => {
               : day === 14
               ? value.last_14_days
               : value.last_30_days;
-          const nTime = time.toString().replace("H", "시간").replace("M", "분");
+          const nTime = time.toString().replace(":", "시간 ");
           return (
             <Grid container key={value.username} sx={{ mt: 5 }}>
               <Grid
@@ -113,7 +104,7 @@ const LeaderBoardList = ({ day, isLoading, data }: Props) => {
                 />
                 <div>
                   <h3 className="name text-dark">{value.username}</h3>
-                  <span>Megabrain</span>
+                  <span>{value.Organization}</span>
                 </div>
               </Grid>
               <Grid
@@ -125,7 +116,7 @@ const LeaderBoardList = ({ day, isLoading, data }: Props) => {
                   justifyContent: "center",
                 }}
               >
-                <Typography>{nTime}</Typography>
+                <Typography>{nTime + "분"}</Typography>
               </Grid>
             </Grid>
           );

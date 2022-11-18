@@ -7,7 +7,6 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import getRefreshMember from "../../apis/getRefreshMember";
 import LeaderBoardList from "../List";
@@ -16,41 +15,25 @@ import getAllMemberWaka from "../../apis/getAllMemberWaka";
 
 const MainBoard = () => {
   const [day, setDay] = useState(7);
-
-  const { mutate, isLoading, isSuccess } = useMutation(getRefreshMember, {
-    onError: (error) => {
-      console.log(error);
-    },
-  });
-
-  const {
-    isLoading: isLoadingList,
-    data,
-    refetch,
-  } = useQuery(["waka"], getAllMemberWaka, {
-    refetchOnWindowFocus: false,
-    retry: 0,
-    onError: (e: any) => {
-      console.log(e.message);
-    },
-  });
-
-  const handleRefresh = () => {
-    mutate(day);
-  };
-
-  const dayFunc = (data) => {
-    if (day === 7) return data.updatedTime7Days;
-    else if (day === 14) return data.updatedTime14Days;
-    else if (day === 30) return data.updatedTime30Days;
-    else return 0;
-  };
+  const [fetchLoading, setFetchLoading] = useState(false);
+  const [memberData, setMemberData] = useState({ data: [], isLoading: true });
 
   useEffect(() => {
-    if (isSuccess) {
-      refetch();
-    }
-  }, [refetch, isSuccess]);
+    getAllMemberWaka().then((res) => {
+      setMemberData({ data: res, isLoading: false });
+    });
+  }, []);
+
+  const handleRefresh = () => {
+    setFetchLoading(true);
+    setMemberData({ ...memberData, isLoading: true });
+    getRefreshMember().then(() => {
+      setFetchLoading(false);
+      getAllMemberWaka().then((res) => {
+        setMemberData({ data: res, isLoading: false });
+      });
+    });
+  };
 
   const handleChange = (
     event: React.MouseEvent<HTMLElement>,
@@ -66,14 +49,14 @@ const MainBoard = () => {
       </Typography>
       <Box className="duration" sx={{ mt: 2 }} textAlign="center">
         <Button
-          disabled={isLoading}
+          disabled={fetchLoading}
           onClick={handleRefresh}
           data-id="0"
           variant="contained"
           endIcon={<RefreshIcon />}
           sx={{ mr: 2, ml: 2 }}
         >
-          {!isLoading ? "갱신" : "로딩중"}
+          {!fetchLoading ? "갱신" : "로딩중"}
         </Button>
       </Box>
       <Box className="duration" sx={{ mt: 3 }} textAlign="center">
@@ -87,15 +70,12 @@ const MainBoard = () => {
           <ToggleButton value={14}>지난 14일</ToggleButton>
           <ToggleButton value={30}>지난 30일</ToggleButton>
         </ToggleButtonGroup>
-        <Typography sx={{ mt: 5 }} fontWeight="300" align="center">
-          갱신 시각: {data ? dayFunc(data) : "00:00"}
-        </Typography>
       </Box>
 
       <LeaderBoardList
         day={day}
-        isLoading={isLoadingList}
-        data={data && data.memberDtos}
+        isLoading={memberData.isLoading}
+        data={memberData.data}
       />
     </Container>
   );

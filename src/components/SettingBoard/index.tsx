@@ -8,7 +8,6 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import postAddMember from "../../apis/postAddMember";
 import CloseIcon from "@mui/icons-material/Close";
@@ -16,30 +15,28 @@ import CloseIcon from "@mui/icons-material/Close";
 export type PersonData = {
   apiKey: string;
   userName: string;
+  organization: string;
 };
 
 const SettingBoard = () => {
+  const [fetchLoading, setFetchLoading] = useState(false);
   const [personData, setPersonData] = useState<PersonData>({
     apiKey: "",
     userName: "",
+    organization: "",
   });
 
   const [toastText, setToastText] = useState("");
-
-  const { mutate } = useMutation(postAddMember, {
-    onSuccess: () => {
-      setToastText("등록 완료");
-    },
-    onError: (error) => {
-      setToastText(error.toString());
-    },
-  });
 
   const clickRegister = async () => {
     if (personData.apiKey.length <= 0 || personData.userName.length <= 0) {
       setToastText("이름 또는 api key를 입력해주세요");
     } else {
-      mutate(personData);
+      setFetchLoading(true);
+      postAddMember(personData).then((res) => {
+        setToastText(res);
+        setFetchLoading(false);
+      });
     }
   };
   const handleClose = (
@@ -79,7 +76,7 @@ const SettingBoard = () => {
             value={personData.userName}
             onChange={(text) => {
               setPersonData({
-                apiKey: personData.apiKey,
+                ...personData,
                 userName: text.target.value,
               });
             }}
@@ -95,8 +92,8 @@ const SettingBoard = () => {
             value={personData.apiKey}
             onChange={(text) =>
               setPersonData({
+                ...personData,
                 apiKey: text.target.value,
-                userName: personData.userName,
               })
             }
             id="standard-basic"
@@ -106,8 +103,25 @@ const SettingBoard = () => {
           />
         </Box>
 
+        <Box textAlign={"center"} sx={{ mt: 2 }}>
+          <TextField
+            value={personData.organization}
+            onChange={(text) =>
+              setPersonData({
+                ...personData,
+                organization: text.target.value,
+              })
+            }
+            id="standard-basic"
+            label="organization"
+            variant="standard"
+            sx={{ m: 1, width: "25ch" }}
+          />
+        </Box>
+
         <Box textAlign={"center"} sx={{ mt: 8 }}>
           <Button
+            disabled={fetchLoading}
             variant="contained"
             sx={{ pr: 10, pl: 10 }}
             onClick={clickRegister}
