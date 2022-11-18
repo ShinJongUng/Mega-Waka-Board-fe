@@ -27,7 +27,7 @@ const MainBoard = () => {
   const handleRefresh = () => {
     setFetchLoading(true);
     setMemberData({ ...memberData, isLoading: true });
-    getRefreshMember().then(() => {
+    getRefreshMember(day).then(() => {
       setFetchLoading(false);
       getAllMemberWaka().then((res) => {
         setMemberData({ data: res, isLoading: false });
