@@ -75,7 +75,7 @@ const MainBoard = () => {
       <LeaderBoardList
         day={day}
         isLoading={memberData.isLoading}
-        data={memberData.data}
+        data={memberData && memberData.data}
       />
     </Container>
   );
