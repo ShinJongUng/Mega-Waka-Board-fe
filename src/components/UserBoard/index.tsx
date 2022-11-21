@@ -56,10 +56,8 @@ const UserBoard = () => {
       labels: data.weekData.label,
       datasets: [
         {
-          label: "minutes",
-          data: data.weekData.data.map((item) =>
-            parseInt((item / 60).toFixed(0))
-          ),
+          label: "Hours",
+          data: data.weekData.data.map((item) => (item / 3600).toFixed(2)),
         },
       ],
     };
