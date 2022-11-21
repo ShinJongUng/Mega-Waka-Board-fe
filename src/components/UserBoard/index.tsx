@@ -19,8 +19,9 @@ import getMemberInfo from "../../apis/getMemberInfo";
 import "chart.js/auto";
 import timeParser from "../../utils/timeParser";
 const UserBoard = () => {
-  const { id } = useParams();
-  const { data, isLoading } = useQuery([id], () => getMemberInfo(id));
+  let { day, id } = useParams();
+  day = day.replace("day", "");
+  const { data, isLoading } = useQuery([day, id], () => getMemberInfo(day, id));
 
   const parseChartLanguages = (data) => {
     data.languages.sort((a, b) => b.seconds - a.seconds);
@@ -96,7 +97,7 @@ const UserBoard = () => {
           <Grid item xs={12} textAlign="center">
             <Typography variant="h4">{`${
               data.username
-            }님은 지난 7일간 ${data.day_7_info.digital.replace(
+            }님은 지난 ${day}일간 ${data.day_7_info.digital.replace(
               ":",
               "시간 "
             )}분 코딩하셨습니다.`}</Typography>

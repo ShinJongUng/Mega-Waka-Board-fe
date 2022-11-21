@@ -16,7 +16,7 @@ function App() {
           <Routes>
             <Route path="/" element={<MainBoard />} />
             <Route path="/setting" element={<SettingBoard />} />
-            <Route path="/user/:id" element={<UserBoard />} />
+            <Route path="/user/:day/:id" element={<UserBoard />} />
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>

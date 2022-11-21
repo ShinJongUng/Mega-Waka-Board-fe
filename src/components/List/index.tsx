@@ -5,9 +5,9 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import GoldMedal from "../../images/goldmedal.png";
-import SilverMedal from "../../images/silvermedal.png";
-import BronzeMedal from "../../images/bronzemedal.png";
+import GoldMedal from "../../images/goldmedal.webp";
+import SilverMedal from "../../images/silvermedal.webp";
+import BronzeMedal from "../../images/bronzemedal.webp";
 import { Link } from "react-router-dom";
 
 type dto = {
@@ -78,7 +78,7 @@ const LeaderBoardList = ({ day, isLoading, data }: Props) => {
           return (
             <Link
               key={value.username}
-              to={`/user/${value.member_id}`}
+              to={`/user/${day}day/${value.member_id}`}
               style={{ textDecoration: "none", color: "black" }}
             >
               <Grid container sx={{ mt: 5 }}>
