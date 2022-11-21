@@ -12,16 +12,59 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 import { useQuery } from "@tanstack/react-query";
-import { Doughnut } from "react-chartjs-2";
+import { Bar, Doughnut } from "react-chartjs-2";
 import { useParams } from "react-router-dom";
 import getMemberInfo from "../../apis/getMemberInfo";
 import "chart.js/auto";
 import timeParser from "../../utils/timeParser";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: "top" as const,
+    },
+  },
+};
+
 const UserBoard = () => {
   let { day, id } = useParams();
   day = day.replace("day", "");
   const { data, isLoading } = useQuery([day, id], () => getMemberInfo(day, id));
+
+  const parseBarChartWeek = (data) => {
+    const newData = {
+      labels: data.weekData.label,
+      datasets: [
+        {
+          label: "minutes",
+          data: data.weekData.data.map((item) =>
+            parseInt((item / 60).toFixed(0))
+          ),
+        },
+      ],
+    };
+    return newData;
+  };
 
   const parseChartLanguages = (data) => {
     data.languages.sort((a, b) => b.seconds - a.seconds);
@@ -91,7 +134,7 @@ const UserBoard = () => {
           spacing={2}
           sx={{ mt: 4 }}
           columns={{ xs: 4, md: 12 }}
-          rowGap={15}
+          rowGap={10}
           columnGap={20}
         >
           <Grid item xs={12} textAlign="center">
@@ -101,6 +144,11 @@ const UserBoard = () => {
               ":",
               "시간 "
             )}분 코딩하셨습니다.`}</Typography>
+          </Grid>
+          <Grid item xs={12} textAlign="center">
+            <Box width="60vw" display="inline-block">
+              <Bar options={options} data={parseBarChartWeek(data)} />
+            </Box>
           </Grid>
           <Grid item xs={5}>
             <Typography variant="h5" textAlign="center" sx={{ mb: 2 }}>
