@@ -8,6 +8,7 @@ import {
 import GoldMedal from "../../images/goldmedal.png";
 import SilverMedal from "../../images/silvermedal.png";
 import BronzeMedal from "../../images/bronzemedal.png";
+import { Link } from "react-router-dom";
 
 type dto = {
   username: string;
@@ -75,50 +76,60 @@ const LeaderBoardList = ({ day, isLoading, data }: Props) => {
               : value.last_30_days;
           const nTime = time.toString().replace(":", "시간 ");
           return (
-            <Grid container key={value.username} sx={{ mt: 5 }}>
-              <Grid
-                item
-                xs={2}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                }}
-              >
-                {index + 1 === 1 ? (
-                  <img src={GoldMedal} width={60} alt="금메달"></img>
-                ) : index + 1 === 2 ? (
-                  <img src={SilverMedal} width={60} alt="은메달"></img>
-                ) : index + 1 === 3 ? (
-                  <img src={BronzeMedal} width={60} alt="동메달"></img>
-                ) : (
-                  <Typography variant="h6">{index + 1}등</Typography>
-                )}
+            <Link
+              key={value.username}
+              to={`/user/${value.member_id}`}
+              style={{ textDecoration: "none", color: "black" }}
+            >
+              <Grid container sx={{ mt: 5 }}>
+                <Grid
+                  item
+                  xs={2}
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                  }}
+                >
+                  {index + 1 === 1 ? (
+                    <img src={GoldMedal} width={60} alt="금메달"></img>
+                  ) : index + 1 === 2 ? (
+                    <img src={SilverMedal} width={60} alt="은메달"></img>
+                  ) : index + 1 === 3 ? (
+                    <img src={BronzeMedal} width={60} alt="동메달"></img>
+                  ) : (
+                    <Typography variant="h6">{index + 1}등</Typography>
+                  )}
+                </Grid>
+                <Grid
+                  item
+                  xs={8}
+                  sx={{ display: "flex", alignItems: "center" }}
+                >
+                  <img
+                    src={`https://avatars.dicebear.com/api/croodles-neutral/${value.username}.svg`}
+                    alt=""
+                    style={{ width: 80, borderRadius: "50%" }}
+                  />
+                  <div>
+                    <h3 className="name text-dark">{value.username}</h3>
+                    <span>{value.Organization}</span>
+                  </div>
+                </Grid>
+                <Grid
+                  item
+                  xs={2}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Typography>{nTime + "분"}</Typography>
+                </Grid>
               </Grid>
-              <Grid item xs={8} sx={{ display: "flex", alignItems: "center" }}>
-                <img
-                  src={`https://avatars.dicebear.com/api/croodles-neutral/${value.username}.svg`}
-                  alt=""
-                  style={{ width: 80, borderRadius: "50%" }}
-                />
-                <div>
-                  <h3 className="name text-dark">{value.username}</h3>
-                  <span>{value.Organization}</span>
-                </div>
-              </Grid>
-              <Grid
-                item
-                xs={2}
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                }}
-              >
-                <Typography>{nTime + "분"}</Typography>
-              </Grid>
-            </Grid>
+            </Link>
           );
         })
       )}

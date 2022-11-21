@@ -1,0 +1,187 @@
+import {
+  Box,
+  CircularProgress,
+  Container,
+  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
+import { Doughnut } from "react-chartjs-2";
+import { useParams } from "react-router-dom";
+import getMemberInfo from "../../apis/getMemberInfo";
+import "chart.js/auto";
+import timeParser from "../../utils/timeParser";
+const UserBoard = () => {
+  const { id } = useParams();
+  const { data, isLoading } = useQuery([id], () => getMemberInfo(id));
+
+  const parseChartLanguages = (data) => {
+    data.languages.sort((a, b) => b.seconds - a.seconds);
+    let newData = {
+      labels: data.languages.map((item) => item.name),
+      datasets: [
+        {
+          label: " minutes",
+          data: data.languages.map((item) =>
+            parseInt((item.seconds / 60).toFixed(0))
+          ),
+        },
+      ],
+    };
+    return newData;
+  };
+
+  const parseChartProjects = (data) => {
+    data.projects.sort((a, b) => b.seconds - a.seconds);
+    let newData = {
+      labels: data.projects.map((item) => item.name),
+      datasets: [
+        {
+          label: " minutes",
+          data: data.projects.map((item) =>
+            parseInt((item.seconds / 60).toFixed(0))
+          ),
+        },
+      ],
+    };
+    return newData;
+  };
+
+  const parseChartEditors = (data) => {
+    data.editors.sort((a, b) => b.seconds - a.seconds);
+    let newData = {
+      labels: data.editors.map((item) => item.name),
+      datasets: [
+        {
+          label: " minutes",
+          data: data.editors.map((item) =>
+            parseInt((item.seconds / 60).toFixed(0))
+          ),
+        },
+      ],
+    };
+    return newData;
+  };
+
+  return (
+    <Container maxWidth="xl">
+      <Toolbar />
+      {isLoading ? (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            mt: 10,
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      ) : (
+        <Grid
+          container
+          spacing={2}
+          sx={{ mt: 4 }}
+          columns={{ xs: 4, md: 12 }}
+          rowGap={15}
+          columnGap={20}
+        >
+          <Grid item xs={12} textAlign="center">
+            <Typography variant="h4">{`${
+              data.username
+            }님은 지난 7일간 ${data.day_7_info.digital.replace(
+              ":",
+              "시간 "
+            )}분 코딩하셨습니다.`}</Typography>
+          </Grid>
+          <Grid item xs={5}>
+            <Typography variant="h5" textAlign="center" sx={{ mb: 2 }}>
+              Languages
+            </Typography>
+            <Doughnut data={parseChartLanguages(data)} />
+          </Grid>
+          <Grid item xs={5}>
+            <TableContainer>
+              <Table aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>언어 (Language)</TableCell>
+                    <TableCell>시간 (Time)</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {data.languages.map((row) => (
+                    <TableRow key={row.name}>
+                      <TableCell>{row.name}</TableCell>
+                      <TableCell>{timeParser(row.seconds)}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
+          <Grid item xs={5}>
+            <Typography variant="h5" textAlign="center" sx={{ mb: 2 }}>
+              Projects
+            </Typography>
+            <Doughnut data={parseChartProjects(data)} />
+          </Grid>
+          <Grid item xs={5}>
+            <TableContainer>
+              <Table aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>프로젝트 (Projects)</TableCell>
+                    <TableCell>시간 (Time)</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {data.projects.map((row) => (
+                    <TableRow key={row.name}>
+                      <TableCell>{row.name}</TableCell>
+                      <TableCell>{timeParser(row.seconds)}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
+          <Grid item xs={5}>
+            <Typography variant="h5" textAlign="center" sx={{ mb: 2 }}>
+              Editors
+            </Typography>
+            <Doughnut data={parseChartEditors(data)} />
+          </Grid>
+          <Grid item xs={5}>
+            <TableContainer>
+              <Table aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>에디터 (IDE)</TableCell>
+                    <TableCell>시간 (Time)</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {data.editors.map((row) => (
+                    <TableRow key={row.name}>
+                      <TableCell>{row.name}</TableCell>
+                      <TableCell>{timeParser(row.seconds)}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
+        </Grid>
+      )}
+    </Container>
+  );
+};
+export default UserBoard;
