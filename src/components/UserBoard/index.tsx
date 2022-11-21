@@ -70,10 +70,8 @@ const UserBoard = () => {
       labels: data.languages.map((item) => item.name),
       datasets: [
         {
-          label: " minutes",
-          data: data.languages.map((item) =>
-            parseInt((item.seconds / 60).toFixed(0))
-          ),
+          label: " Hours",
+          data: data.languages.map((item) => (item.seconds / 3600).toFixed(2)),
         },
       ],
     };
@@ -87,9 +85,7 @@ const UserBoard = () => {
       datasets: [
         {
           label: " minutes",
-          data: data.projects.map((item) =>
-            parseInt((item.seconds / 60).toFixed(0))
-          ),
+          data: data.projects.map((item) => (item.seconds / 3600).toFixed(2)),
         },
       ],
     };
@@ -103,9 +99,7 @@ const UserBoard = () => {
       datasets: [
         {
           label: " minutes",
-          data: data.editors.map((item) =>
-            parseInt((item.seconds / 60).toFixed(0))
-          ),
+          data: data.editors.map((item) => (item.seconds / 3600).toFixed(2)),
         },
       ],
     };
@@ -144,7 +138,7 @@ const UserBoard = () => {
             )}분 코딩하셨습니다.`}</Typography>
           </Grid>
           <Grid item xs={12} textAlign="center">
-            <Box width="60vw" display="inline-block">
+            <Box width="100vw" maxWidth={1200} display="inline-block">
               <Bar options={options} data={parseBarChartWeek(data)} />
             </Box>
           </Grid>
