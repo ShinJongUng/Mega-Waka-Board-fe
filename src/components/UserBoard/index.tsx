@@ -84,7 +84,7 @@ const UserBoard = () => {
       labels: data.projects.map((item) => item.name),
       datasets: [
         {
-          label: " minutes",
+          label: " Hours",
           data: data.projects.map((item) => (item.seconds / 3600).toFixed(2)),
         },
       ],
@@ -98,7 +98,7 @@ const UserBoard = () => {
       labels: data.editors.map((item) => item.name),
       datasets: [
         {
-          label: " minutes",
+          label: " Hours",
           data: data.editors.map((item) => (item.seconds / 3600).toFixed(2)),
         },
       ],
@@ -138,7 +138,7 @@ const UserBoard = () => {
             )}분 코딩하셨습니다.`}</Typography>
           </Grid>
           <Grid item xs={12} textAlign="center">
-            <Box width="100vw" maxWidth={1200} display="inline-block">
+            <Box width="90vw" maxWidth={1200} display="inline-block">
               <Bar options={options} data={parseBarChartWeek(data)} />
             </Box>
           </Grid>
