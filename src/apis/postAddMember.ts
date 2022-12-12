@@ -4,7 +4,7 @@ import { PersonData } from "../components/SettingBoard";
 const postAddMember = async (personData: PersonData) => {
   try {
     const result = await axios.post(
-      `http://203.241.228.50:18083/api/user/add-user`,
+      `https://wakaserver.megabrain.kr/api/user/add-user`,
       {},
       {
         params: {
