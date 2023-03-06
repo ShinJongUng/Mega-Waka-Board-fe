@@ -50,7 +50,7 @@ const UserBoard = () => {
   let { day, id } = useParams();
   day = day.replace("day", "");
   const { data, isLoading } = useQuery([day, id], () => getMemberInfo(day, id));
-
+  console.log(data);
   const parseBarChartWeek = (data) => {
     const newData = {
       labels: data.weekData.label,
