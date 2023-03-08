@@ -1,13 +1,13 @@
 <br />
 <div align="center">
 
-  <h1 align="center">메가브레인 와카타임 대시보드 Back-End</h3>
+  <h1 align="center">메가브레인 와카타임 대시보드 Front-End</h3>
 
   <p align="center">
-    <img src="https://skillicons.dev/icons?i=ts,materialui,emotion,docker">
+    <img src="https://skillicons.dev/icons?i=ts,react,materialui,emotion,docker">
     <br />
     <br />
-    <strong>Skill: Typescript, Material-UI, Emotion, Docker	</strong>
+    <strong>Skill: Typescript, React, Material-UI, Emotion, Docker	</strong>
 
   </p>
 </div>
