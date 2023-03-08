@@ -21,7 +21,7 @@ wakatime 서비스는 개발 시간 측정 서비스로 각 개발 ide 플러그
 
 매번 불편하게 discord에 캡쳐 해서 상황을 보여주는 방식 대신 leader board를 만들어 개발 정보를 한 눈에 볼 수 있도록 개발 되었습니다.
 
-[자세한 내용 보러 가기](https://www.jongung.com/287)
+[자세한 내용 보러 가기](https://www.jongung.com/288)
 
 <br />
 
